@@ -2,8 +2,7 @@
 'use strict';
 
 const meow = require('meow');
-const { deleteBranches, listLocalBranches, } = require('./git');
-const { getAnswers, listChoices, logSuccess, showPrompt, } = require('./ui');
+const chipper = require('.');
 
 const help = `
   Usage
@@ -31,15 +30,15 @@ const opts = {
 };
 
 const cli = meow(help, opts);
+const { not, } = cli.flags;
 
-const not = cli.flags.not.split(',')
-.filter(name => Boolean(name))
-.map(name => name.trim());
+const notSelected = stringListToArray(not);
 
-listLocalBranches()
-.then(listChoices.bind(null, not))
-.then(showPrompt)
-.then(getAnswers)
-.then(deleteBranches)
-.then(logSuccess);
+chipper(notSelected);
+
+function stringListToArray(str) {
+  const arr = str ? str.split(',') : [];
+
+  return arr;
+}
 

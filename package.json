@@ -1,0 +1,36 @@
+{
+  "name": "git-chipper",
+  "version": "0.0.0",
+  "description": "Interactive CLI for batch deleting local branches.",
+  "license": "MIT",
+  "repository": "maxhallinan/git-chipper",
+  "author": {
+    "name": "Maximum Hallinan",
+    "email": "maxhallinan@gmail.com",
+    "url": "github.com/maxhallinan"
+  },
+  "bin": "cli.js",
+  "engines": {
+    "node": ">=6"
+  },
+  "scripts": {
+    "test": "xo && ava"
+  },
+  "files": [
+    "index.js",
+    "cli.js"
+  ],
+  "keywords": [
+    "cli-app",
+    "cli",
+    "git branch",
+    "git delete"
+  ],
+  "dependencies": {
+    "meow": "^3.7.0"
+  },
+  "devDependencies": {
+    "ava": "^0.17.0",
+    "xo": "^0.17.0"
+  }
+}

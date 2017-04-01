@@ -18,8 +18,9 @@ $ npm install --global git-chipper
 
 ```
 $ git-chipper --help
+
 	Usage
-	  $ git-chipper
+		$ git-chipper
 		# ...follow the terminal prompt instructions
 ```
 

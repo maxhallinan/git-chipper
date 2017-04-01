@@ -6,7 +6,7 @@ const gitChipper = require('.');
 
 const cli = meow(`
 	Usage
-	  $ git-chipper
+		$ git-chipper
 		# ...follow the terminal prompt instructions
 `);
 

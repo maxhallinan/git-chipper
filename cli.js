@@ -1,9 +1,8 @@
 #!/usr/bin/env node
 'use strict';
-
 const inquirer = require('inquirer');
 const meow = require('meow');
-const git = require('simple-git')();
+const { deleteBranches, listLocalBranches, } = require('./git');
 
 const ui = new inquirer.ui.BottomBar();
 
@@ -38,32 +37,20 @@ const not = cli.flags.not.split(',')
 .filter(name => Boolean(name))
 .map(name => name.trim());
 
-(new Promise((resolve, reject) => {
-  git.branch((err, data) => {
-    if (err) {
-      return reject(err);
-    }
-
-    return resolve(data);
-  });
-}))
+listLocalBranches()
 .then(branchSummary => {
   const { all, branches, } = branchSummary;
 
-  const choices = all.reduce((locals, name) => {
+  const choices = all.map(name => {
     const { current, } = branches[name];
 
-    if (!name.includes('remotes')) {
-      locals.push({
-        disabled: current ? 'Current branch' : false,
-        name,
-        short: name,
-        value: name,
-      });
-    }
-
-    return locals;
-  }, []);
+    return {
+      disabled: current ? 'Current branch' : false,
+      name,
+      short: name,
+      value: name,
+    };
+  });
 
   const selected = not.length && all.filter(name => not.indexOf(name) === -1);
 
@@ -81,19 +68,8 @@ const not = cli.flags.not.split(',')
 
   return inquirer.prompt(prompt);
 })
-.then(answers => {
-  const { toDelete, } = answers;
-
-  return Promise.all(toDelete.map(name => (new Promise((resolve, reject) => {
-    git.deleteLocalBranch(name, (err, data) => {
-      if (err) {
-        reject(err);
-      }
-
-      resolve(data);
-    });
-  }))));
-})
+.then(answers => answers.toDelete)
+.then(deleteBranches)
 .then(deletions => {
   const isSuccess = deletions.reduce((isSuccess, { success, }) => {
     if (!isSuccess) {
@@ -101,7 +77,7 @@ const not = cli.flags.not.split(',')
     }
 
     return success;
-  })
+  });
 
   if (isSuccess) {
     ui.log.write('Branches deleted successfully!');

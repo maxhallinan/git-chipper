@@ -1,5 +1,6 @@
 'use strict';
 
+const chalk = require('chalk');
 const inquirer = require('inquirer');
 
 const ui = new inquirer.ui.BottomBar();
@@ -16,7 +17,7 @@ function listChoices(notSelected, branchSummary) {
 
     return {
       disabled: current ? 'Current branch' : false,
-      name,
+      name: current ? chalk.cyan(name) : name,
       short: name,
       value: name,
     };

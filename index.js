@@ -1,10 +1,8 @@
 'use strict';
-module.exports = (input, opts) => {
-	if (typeof input !== 'string') {
-		throw new TypeError(`Expected a string, got ${typeof input}`);
-	}
+module.exports = input => {
+  if (typeof input !== 'string') {
+    throw new TypeError(`Expected a string, got ${typeof input}`);
+  }
 
-	opts = opts || {};
-
-	return input;
+  return input;
 };

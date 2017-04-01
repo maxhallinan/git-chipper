@@ -2,6 +2,7 @@
 
 An interactive CLI for batch deleting local branches.
 
+**Work in progress.**
 
 ## Install
 

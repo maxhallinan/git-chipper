@@ -2,7 +2,7 @@
 'use strict';
 
 const meow = require('meow');
-const chipper = require('.');
+const chipper = require('./chipper');
 
 const help = `
   Usage
@@ -10,7 +10,7 @@ const help = `
 
   Options
     -n, --not
-      Select all branches except those named in a comma-separated list.
+      Check all branches except those named in this comma-separated list.
 
   Examples
     $ git-chipper
@@ -30,15 +30,8 @@ const opts = {
 };
 
 const cli = meow(help, opts);
+
 const { not, } = cli.flags;
+const notChecked = not ? not.split(',') : [];
 
-const notSelected = stringListToArray(not);
-
-chipper(notSelected);
-
-function stringListToArray(str) {
-  const arr = str ? str.split(',') : [];
-
-  return arr;
-}
-
+chipper(notChecked);

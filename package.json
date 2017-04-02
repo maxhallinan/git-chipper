@@ -17,9 +17,10 @@
     "test": "xo && ava"
   },
   "files": [
-    "index.js",
+    "chipper.js",
     "cli.js",
-    "git.js"
+    "git.js",
+    "ui.js"
   ],
   "keywords": [
     "cli-app",

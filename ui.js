@@ -1,5 +1,4 @@
 'use strict';
-
 const chalk = require('chalk');
 const inquirer = require('inquirer');
 
@@ -16,7 +15,7 @@ function listChoices(notSelected, branchSummary) {
     const { current, } = branches[name];
 
     return {
-      disabled: current ? 'Current branch' : false,
+      disabled: current ? 'current branch' : false,
       name: current ? chalk.blue(name) : name,
       short: name,
       value: name,
@@ -30,7 +29,7 @@ function listChoices(notSelected, branchSummary) {
 
 function logSuccess(isSuccess) {
   if (isSuccess) {
-    ui.log.write('Branches deleted successfully!');
+    ui.log.write('Branches deleted!');
   }
 }
 

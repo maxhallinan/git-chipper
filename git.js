@@ -1,5 +1,4 @@
 'use strict';
-
 const git = require('simple-git')();
 
 // deleteBranch :: String -> Promise
@@ -15,7 +14,7 @@ function deleteBranch(name) {
   });
 }
 
-// deleteBranchs :: Array -> Promise
+// deleteBranches :: Array -> Promise
 function deleteBranches(names) {
   return Promise.all(names.map(deleteBranch));
 }

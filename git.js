@@ -1,6 +1,8 @@
 'use strict';
+
 const git = require('simple-git')();
 
+// deleteBranch :: String -> Promise
 function deleteBranch(name) {
   return new Promise((resolve, reject) => {
     git.deleteLocalBranch(name, (err, data) => {
@@ -13,10 +15,12 @@ function deleteBranch(name) {
   });
 }
 
+// deleteBranchs :: Array -> Promise
 function deleteBranches(names) {
   return Promise.all(names.map(deleteBranch));
 }
 
+// listLocaLBranches :: * -> Promise
 function listLocalBranches() {
   return new Promise(
     (resolve, reject) => {
@@ -31,6 +35,7 @@ function listLocalBranches() {
   );
 }
 
+module.exports.deleteBranch = deleteBranch;
 module.exports.deleteBranches = deleteBranches;
 module.exports.listLocalBranches = listLocalBranches;
 

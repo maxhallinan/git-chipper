@@ -10,7 +10,7 @@ const help = `
 
   Options
     -n, --not
-      Check all branches except those named in this comma-separated list.
+      Select all branches except those named in this comma-separated list.
 
   Examples
     $ git-chipper
@@ -32,6 +32,7 @@ const opts = {
 const cli = meow(help, opts);
 
 const { not, } = cli.flags;
-const notChecked = not ? not.split(',') : [];
+const notSelected = not ? not.split(',') : [];
 
-chipper(notChecked);
+chipper(notSelected);
+

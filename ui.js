@@ -17,7 +17,7 @@ function listChoices(notSelected, branchSummary) {
 
     return {
       disabled: current ? 'Current branch' : false,
-      name: current ? chalk.cyan(name) : name,
+      name: current ? chalk.blue(name) : name,
       short: name,
       value: name,
     };
@@ -36,9 +36,9 @@ function logSuccess(isSuccess) {
 
 function showPrompt({ choices, selected, }) {
   const prompt = {
-    choices,
+    choices: [new inquirer.Separator(' '), ...choices],
     default: selected,
-    message: 'Select branches to delete',
+    message: 'Select branches to delete: ',
     name: 'toDelete',
     pageSize: 20,
     type: 'checkbox',

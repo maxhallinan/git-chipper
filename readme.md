@@ -24,7 +24,7 @@ $ git-chipper --help
 
   Options
     -n, --not
-      Select all branch names except those provided in this comma-separated list.
+      Select all branches except those named in this comma-separated list.
 
   Examples
     $ git-chipper

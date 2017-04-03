@@ -1,18 +1,11 @@
 'use strict';
-const {
-  deleteBranches,
-  listLocalBranches,
-} = require('./git');
-const {
-  getAnswers,
-  listChoices,
-  logSuccess,
-  showPrompt,
-} = require('./ui');
+const { deleteBranches, listLocalBranches, } = require('./git');
+const { getAnswers, listChoices, logSuccess, showPrompt, } = require('./ui');
+const { curry, } = require('./util');
 
-module.exports = function (notSelected) {
+module.exports = notSelected => {
   listLocalBranches()
-    .then(branches => listChoices(notSelected, branches))
+    .then(curry(listChoices)(notSelected))
     .then(showPrompt)
     .then(getAnswers)
     .then(deleteBranches)

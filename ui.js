@@ -1,18 +1,18 @@
 'use strict';
 const chalk = require('chalk');
 const inquirer = require('inquirer');
+const { compose, curry, curryRight, get, includes, not, } = require('./util');
 
-const ui = new inquirer.ui.BottomBar();
+const log = (new inquirer.ui.BottomBar()).log;
+const ui = exports;
 
-function getAnswers(answers) {
-  return answers.toDelete;
-}
+// getAnswers :: Object -> Array
+ui.getAnswers = curry(get)('toDelete');
 
-function listChoices(notSelected, branchSummary) {
-  const { all, branches, } = branchSummary;
-
-  const choices = all.map(name => {
-    const { current, } = branches[name];
+// listChoices :: Array -> Array
+ui.listChoices = branches => branches.map(
+  branch => {
+    const { current, name, } = branch;
 
     return {
       disabled: current ? 'current branch' : false,
@@ -20,22 +20,42 @@ function listChoices(notSelected, branchSummary) {
       short: name,
       value: name,
     };
-  });
+  }
+);
 
-  const selected = notSelected.length && all.filter(name => notSelected.indexOf(name) === -1);
+// listSelected :: (Array, Array) -> Object
+ui.listSelected = (notSelected, choices) => {
+  const isSelected = compose(
+    not,
+    curryRight(includes)(notSelected)
+  );
+
+  const selected = !notSelected.length
+    ? []
+    : choices.reduce((selected, { name, }) => {
+        if (isSelected(name)) {
+          selected.push(name);
+        }
+
+        return selected;
+      }, []);
 
   return { choices, selected, };
-}
+};
 
-function logSuccess(isSuccess) {
+// logSuccess :: Bool -> Undefined
+ui.logSuccess = isSuccess => {
   if (isSuccess) {
-    ui.log.write('Branches deleted!');
+    log.write('Branches deleted!');
   }
-}
+};
 
-function showPrompt({ choices, selected, }) {
+// showPrompt :: Object -> Promise
+ui.showPrompt = ({ selected, choices, }) => {
+  const emptyLine = new inquirer.Separator(' ');
+
   const prompt = {
-    choices: [new inquirer.Separator(' '), ...choices],
+    choices: [ emptyLine, ...choices, ],
     default: selected,
     message: 'Select branches to delete: ',
     name: 'toDelete',
@@ -44,10 +64,5 @@ function showPrompt({ choices, selected, }) {
   };
 
   return inquirer.prompt(prompt);
-}
-
-module.exports.getAnswers = getAnswers;
-module.exports.listChoices = listChoices;
-module.exports.logSuccess = logSuccess;
-module.exports.showPrompt = showPrompt;
+};
 

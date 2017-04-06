@@ -2,7 +2,7 @@
 const _ = exports;
 
 // compose ::
-_.compose = (...fns) => x => [...fns].reverse().reduce((x, fn) => fn(x), x);
+_.compose = (...fns) => x => [ ...fns, ].reverse().reduce((x, fn) => fn(x), x);
 
 // curry :: (* -> a, Number) -> (* -> a)
 _.curry = function (fn, arity = fn.length) {

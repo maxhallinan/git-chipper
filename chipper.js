@@ -1,6 +1,6 @@
 'use strict';
 const { deleteBranches, listLocalBranches, } = require('./git');
-const { askQuestion, getAnswers, logResult, } = require('./ui');
+const { askQuestion, getAnswers, logError, logResult, } = require('./ui');
 const { curry, } = require('./util');
 
 module.exports = notSelected => {
@@ -8,6 +8,7 @@ module.exports = notSelected => {
   .then(curry(askQuestion)(notSelected))
   .then(getAnswers)
   .then(deleteBranches)
-  .then(logResult);
+  .then(logResult)
+  .catch(logError);
 };
 

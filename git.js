@@ -1,5 +1,7 @@
 'use strict';
 const simpleGit = require('simple-git')();
+// silence logging
+simpleGit.silent(true);
 
 const git = exports;
 
@@ -8,7 +10,8 @@ git.deleteBranch = name => {
   return new Promise((resolve, reject) => {
     simpleGit.deleteLocalBranch(name, (err, data) => {
       if (err) {
-        return reject(err);
+        reject(err);
+        return;
       }
 
       resolve(data);

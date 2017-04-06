@@ -16,6 +16,8 @@ const {
 
 const ui = exports;
 
+const log = new inquirer.ui.BottomBar().log;
+
 // ui.getName :: { name: a } -> a
 ui.getName = partial(get, 'name');
 
@@ -89,13 +91,21 @@ ui.buildMessage = names => {
     'No branches selected';
 
   // pad start with two extra spaces to match Inquirer logs
-  return `  ${message}`;
+  return `  ${chalk.bold(message)}`;
 };
 
 // ui.logResult :: Array -> Undefined
 ui.logResult = compose(
-  new inquirer.ui.BottomBar().log.write,
+  log.write,
   ui.buildMessage,
   ui.joinNames
+);
+
+ui.logError = compose(
+  log.write,
+  (message = '') => `${chalk.green('!')} ${chalk.bold(message)}`,
+  (message = '') => `${message[0].toUpperCase()}${message.substring(1)}`,
+  (message = '') => message.replace('\n', '\n  '),
+  (message = '') => message.replace('error: ', '')
 );
 

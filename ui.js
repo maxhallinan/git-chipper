@@ -4,7 +4,6 @@ const inquirer = require('inquirer');
 const {
   compose,
   curry,
-  curryRight,
   filter,
   get,
   includes,
@@ -12,6 +11,7 @@ const {
   map,
   not,
   partial,
+  partialRight,
 } = require('./util');
 
 const ui = exports;
@@ -36,10 +36,10 @@ ui.buildChoices = branches => branches.map(ui.branchToChoice);
 // ui.isSelected :: Array -> a -> Bool
 ui.isSelected = notSelected => compose(
   not,
-  curryRight(includes)(notSelected),
+  partialRight(includes, notSelected)
 );
 
-// ui.filterSelected :: Array -> Array -> Array
+// ui.filterSelected :: Array -> (Array -> Array)
 ui.filterSelected = notSelected => compose(
   curry(filter)(ui.isSelected(notSelected)),
   ui.getNames

@@ -2,7 +2,7 @@
 const _ = exports;
 
 // compose ::
-_.compose = (...fns) => x => fns.reverse().reduce((x, fn) => fn(x), x);
+_.compose = (...fns) => x => [...fns].reverse().reduce((x, fn) => fn(x), x);
 
 // curry :: (* -> a, Number) -> (* -> a)
 _.curry = function (fn, arity = fn.length) {
@@ -13,21 +13,6 @@ _.curry = function (fn, arity = fn.length) {
 
     if (args.length >= arity) {
       return fn(...args);
-    }
-
-    return curried;
-  };
-};
-
-// curryRight :: (* -> a, Number) -> (* -> a)
-_.curryRight = function (fn, arity = fn.length) {
-  let args = [];
-
-  return function curried(...nextArgs) {
-    args = [ ...args, ...nextArgs, ];
-
-    if (args.length >= arity) {
-      return fn(...args.reverse());
     }
 
     return curried;
@@ -57,4 +42,7 @@ _.not = x => !x;
 
 // partial ::
 _.partial = (fn, ...args) => fn.bind(null, ...args);
+
+// partialRight :: (a -> a, b
+_.partialRight = (fn, ...args) => (...nextArgs) => fn(...nextArgs, ...args.reverse());
 

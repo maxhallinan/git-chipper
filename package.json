@@ -1,6 +1,6 @@
 {
   "name": "git-chipper",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Interactive CLI for batch deleting local branches.",
   "license": "MIT",
   "repository": "maxhallinan/git-chipper",

@@ -4,7 +4,7 @@ const simpleGit = require('simple-git')();
 const git = exports;
 
 // deleteBranch :: String -> Promise
-git.deleteBranch = function (name) {
+git.deleteBranch = name => {
   return new Promise((resolve, reject) => {
     simpleGit.deleteLocalBranch(name, (err, data) => {
       if (err) {
@@ -14,25 +14,29 @@ git.deleteBranch = function (name) {
       resolve(data);
     });
   });
-}
+};
 
 // deleteBranches :: Array -> Promise
-git.deleteBranches = function (names) {
+git.deleteBranches = names => {
   return Promise.all(names.map(git.deleteBranch));
-}
+};
+
+// getBranches :: Object -> Array
+const getBranches = ({ all, branches, }) => all.map(name => branches[name]);
 
 // listLocaLBranches :: * -> Promise
-git.listLocalBranches = function () {
+git.listLocalBranches = () => {
   return new Promise(
     (resolve, reject) => {
       simpleGit.branchLocal((err, data) => {
         if (err) {
-          return reject(err);
+          reject(err);
+          return;
         }
 
         resolve(data);
       });
     }
-  );
-}
+  ).then(getBranches);
+};
 

@@ -1,68 +1,101 @@
 'use strict';
 const chalk = require('chalk');
 const inquirer = require('inquirer');
-const { compose, curry, curryRight, get, includes, not, } = require('./util');
+const {
+  compose,
+  curry,
+  curryRight,
+  filter,
+  get,
+  includes,
+  join,
+  map,
+  not,
+  partial,
+} = require('./util');
 
-const log = (new inquirer.ui.BottomBar()).log;
 const ui = exports;
 
-// getAnswers :: Object -> Array
-ui.getAnswers = curry(get)('toDelete');
+// ui.getName :: { name: a } -> a
+ui.getName = partial(get, 'name');
 
-// listChoices :: Array -> Array
-ui.listChoices = branches => branches.map(
-  branch => {
-    const { current, name, } = branch;
+// ui.getNames :: [{ name: a }] -> [a]
+ui.getNames = curry(map)(ui.getName);
 
-    return {
-      disabled: current ? 'current branch' : false,
-      name: current ? chalk.blue(name) : name,
-      short: name,
-      value: name,
-    };
-  }
+// ui.branchToChoice :: Object -> Object
+ui.branchToChoice = ({ current, name, }) => ({
+  disabled: current ? 'current branch' : false,
+  name: current ? chalk.blue(name) : name,
+  short: name,
+  value: name,
+});
+
+// ui.listChoices :: Array -> Array
+ui.buildChoices = branches => branches.map(ui.branchToChoice);
+
+// ui.isSelected :: Array -> a -> Bool
+ui.isSelected = notSelected => compose(
+  not,
+  curryRight(includes)(notSelected),
 );
 
-// listSelected :: (Array, Array) -> Object
-ui.listSelected = (notSelected, choices) => {
-  const isSelected = compose(
-    not,
-    curryRight(includes)(notSelected)
-  );
+// ui.filterSelected :: Array -> Array -> Array
+ui.filterSelected = notSelected => compose(
+  curry(filter)(ui.isSelected(notSelected)),
+  ui.getNames
+);
 
-  const selected = !notSelected.length
-    ? []
-    : choices.reduce((selected, { name, }) => {
-        if (isSelected(name)) {
-          selected.push(name);
-        }
+// ui.listSelected :: (Array, Object) -> Object
+ui.buildSelected = (notSelected, choices) => ({
+  choices,
+  selected: notSelected.length ? ui.filterSelected(notSelected)(choices) : [],
+});
 
-        return selected;
-      }, []);
+// ui.buildPrompt :: Object -> Promise
+ui.buildPrompt = ({ selected, choices, }) => ({
+  choices: [ ...choices, ],
+  default: selected,
+  message: 'Select branches to delete: ',
+  name: 'branches',
+  pageSize: 20,
+  type: 'checkbox',
+});
 
-  return { choices, selected, };
+// ui.showPrompt :: Array -> Promise
+ui.askQuestion = notSelected => compose(
+  inquirer.prompt,
+  ui.buildPrompt,
+  curry(ui.buildSelected)(notSelected),
+  ui.buildChoices
+);
+
+// ui.getAnswers :: { branches: a } -> a
+ui.getAnswers = partial(get, 'branches');
+
+// ui.getDeleted :: { branch : a } -> a
+ui.getDeleted = branch => get('branch', branch);
+
+// ui.joinNames :: Array -> String
+ui.joinNames = compose(
+  curry(join)(', '),
+  curry(map)(ui.getDeleted)
+);
+
+// ui.buildMessage :: String -> String
+ui.buildMessage = names => {
+  const message = names.length ?
+    // add two extra spaces after : to match Inquirer logs
+    `Deleted branches:  ${chalk.cyan(names)}` :
+    'No branches selected';
+
+  // pad start with two extra spaces to match Inquirer logs
+  return `  ${message}`;
 };
 
-// logSuccess :: Bool -> Undefined
-ui.logSuccess = isSuccess => {
-  if (isSuccess) {
-    log.write('Branches deleted!');
-  }
-};
-
-// showPrompt :: Object -> Promise
-ui.showPrompt = ({ selected, choices, }) => {
-  const emptyLine = new inquirer.Separator(' ');
-
-  const prompt = {
-    choices: [ emptyLine, ...choices, ],
-    default: selected,
-    message: 'Select branches to delete: ',
-    name: 'toDelete',
-    pageSize: 20,
-    type: 'checkbox',
-  };
-
-  return inquirer.prompt(prompt);
-};
+// ui.logResult :: Array -> Undefined
+ui.logResult = compose(
+  new inquirer.ui.BottomBar().log.write,
+  ui.buildMessage,
+  ui.joinNames
+);
 

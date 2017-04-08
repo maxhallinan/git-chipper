@@ -46,3 +46,6 @@ _.partial = (fn, ...args) => fn.bind(null, ...args);
 // partialRight :: (a -> a, b
 _.partialRight = (fn, ...args) => (...nextArgs) => fn(...nextArgs, ...args.reverse());
 
+// replace :: (String, String | RegEx, String) -> String
+_.replace = (source, pattern, replacement) => source.replace(pattern, replacement);
+

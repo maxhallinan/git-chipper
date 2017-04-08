@@ -84,28 +84,38 @@ ui.joinNames = compose(
 );
 
 // ui.buildMessage :: String -> String
-ui.buildMessage = names => {
+ui.buildResultMsg = names => {
+  // add two extra spaces after : to match Inquirer logs
   const message = names.length ?
-    // add two extra spaces after : to match Inquirer logs
-    `Deleted branches:  ${chalk.cyan(names)}` :
+    'Deleted branches:  ' :
     'No branches selected';
 
   // pad start with two extra spaces to match Inquirer logs
-  return `  ${chalk.bold(message)}`;
+  return `  ${chalk.bold(message)}${chalk.cyan(names)}`;
 };
 
 // ui.logResult :: Array -> Undefined
 ui.logResult = compose(
   log.write,
-  ui.buildMessage,
+  ui.buildResultMsg,
   ui.joinNames
 );
 
-ui.logError = compose(
-  log.write,
-  (message = '') => `${chalk.green('!')} ${chalk.bold(message)}`,
+// ui.formatErrMsg :: String -> String
+ui.formatErrMsg = msg =>
+`${chalk.green('!')} ${chalk.red('Error')}${chalk.bold(`: ${msg}`)}`;
+
+// ui.buildErrMsg :: String -> String
+ui.buildErrMsg = compose(
+  ui.formatErrMsg,
   (message = '') => `${message[0].toUpperCase()}${message.substring(1)}`,
   (message = '') => message.replace('\n', '\n  '),
   (message = '') => message.replace('error: ', '')
+);
+
+// ui.logError :: String -> Undefined
+ui.logError = compose(
+  log.write,
+  ui.buildErrMsg
 );
 

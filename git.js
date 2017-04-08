@@ -8,13 +8,19 @@ const git = exports;
 // deleteBranch :: String -> Promise
 git.deleteBranch = name => {
   return new Promise((resolve, reject) => {
-    simpleGit.deleteLocalBranch(name, (err, data) => {
+    // Use both `-d` and `-D` to work around two `simple-git` limitations:
+    // 1. simple-git#deleteLocalBranch does not enable force delete.
+    // 2. A DeleteBranchSummary is only provided to the `simple-git#deleteLocalBranch`
+    // or `simple-git#branch` callback if `-d` is in the `options` array.
+    // Thus, to both force delete and receive `DeleteBranchSummary`,
+    // provide both `-d` and `-D`.
+    simpleGit.branch([ '-d', '-D', name, ], (err, DeleteBranchSummary) => {
       if (err) {
         reject(err);
         return;
       }
 
-      resolve(data);
+      resolve(DeleteBranchSummary);
     });
   });
 };
@@ -31,13 +37,13 @@ const getBranches = ({ all, branches, }) => all.map(name => branches[name]);
 git.listLocalBranches = () => {
   return new Promise(
     (resolve, reject) => {
-      simpleGit.branchLocal((err, data) => {
+      simpleGit.branchLocal((err, BranchSummary) => {
         if (err) {
           reject(err);
           return;
         }
 
-        resolve(data);
+        resolve(BranchSummary);
       });
     }
   ).then(getBranches);

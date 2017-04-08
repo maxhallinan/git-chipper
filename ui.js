@@ -17,9 +17,9 @@ const {
   toTitleCase,
 } = require('./util');
 
-const ui = exports;
-
 const log = new inquirer.ui.BottomBar().log;
+
+const ui = exports;
 
 // ui.getName :: { name: a } -> a
 ui.getName = partial(get, 'name');
@@ -127,8 +127,7 @@ ui.buildErrMsg = compose(
   toTitleCase,
   partialRight(replace, '\n  ', '\n'),
   partialRight(replace, 'git-chipper -f', 'git branch -D BAZ'),
-  partialRight(replace, '', 'fatal: '),
-  partialRight(replace, '', 'error: '),
+  partialRight(replace, '', /(error: |fatal: )/g),
   ui.getErrMsg
 );
 

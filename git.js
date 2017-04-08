@@ -28,7 +28,7 @@ git.deleteBranch = (name, isForce = false) => {
   });
 };
 
-// deleteBranches :: Array -> Promise [ BeleteBranchSummary ]
+// deleteBranches :: Array -> Promise [ DeleteBranchSummary ]
 git.deleteBranches = (names, isForce = false) => {
   return Promise.all(
     names.map(name => git.deleteBranch(name, isForce))

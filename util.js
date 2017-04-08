@@ -4,7 +4,7 @@ const _ = exports;
 // alphaCompare :: (String, String) -> Number
 _.alphaCompare = (a = '', b = '') => a.toLowerCase().localeCompare(b.toLowerCase());
 
-// compose ::
+// compose :: ((x -> z), ..., (b -> c), (a -> b), (x -> a)) -> x -> z
 _.compose = (...fns) => x => [ ...fns, ].reverse().reduce((x, fn) => fn(x), x);
 
 // curry :: (* -> a, Number) -> (* -> a)
@@ -43,10 +43,10 @@ _.map = (fn, x) => x.map(fn);
 // not :: * -> Bool
 _.not = x => !x;
 
-// partial ::
+// partial :: ((a, b, ..., z) -> x), a, b, c, ..., w) -> ((..., x, y, z) -> x)
 _.partial = (fn, ...args) => fn.bind(null, ...args);
 
-// partialRight :: (a -> a, b)
+// partial :: ((a, b, ..., z) -> x), z, y, x, w, ..., d) -> ((a, b, c, ...) -> x)
 _.partialRight = (fn, ...args) => (...nextArgs) => fn(...nextArgs, ...args.reverse());
 
 // replace :: (String, String | RegEx, String) -> String

@@ -1,7 +1,12 @@
 #!/usr/bin/env node
 'use strict';
 const meow = require('meow');
-const chipper = require('./chipper');
+const { deleteBranches, listLocalBranches, } = require('./git');
+const { askQuestion, getAnswers, logError, logResult, } = require('./ui');
+const { curry, partialRight, } = require('./util');
+
+// adaptBranches :: { all: [ name ], { name: Object } } -> [ Object ]
+const adaptBranches = ({ all, branches, }) => all.map(name => branches[name]);
 
 const help = `
   Usage
@@ -25,6 +30,7 @@ const help = `
 const opts = {
   alias: {
     f: 'force',
+    h: 'help',
     n: 'not',
   },
   default: {
@@ -35,8 +41,18 @@ const opts = {
 
 const cli = meow(help, opts);
 
-const { force, not, } = cli.flags;
+const {
+  force: isForce,
+  not,
+} = cli.flags;
+
 const notSelected = not ? not.split(',') : [];
 
-chipper(notSelected, force);
+listLocalBranches()
+.then(adaptBranches)
+.then(curry(askQuestion)(notSelected))
+.then(getAnswers)
+.then(partialRight(deleteBranches, isForce))
+.then(logResult)
+.catch(logError);
 

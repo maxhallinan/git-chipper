@@ -6,7 +6,7 @@ simpleGit.silent(true);
 
 const git = exports;
 
-// deleteBranch :: String -> Promise
+// deleteBranch :: String -> Promise DeleteBranchSummary
 git.deleteBranch = (name, isForce = false) => {
   // Use both `-d` and `-D` to work around two `simple-git` limitations:
   // 1. simple-git#deleteLocalBranch does not enable force delete.
@@ -28,17 +28,14 @@ git.deleteBranch = (name, isForce = false) => {
   });
 };
 
-// deleteBranches :: Array -> Promise
+// deleteBranches :: Array -> Promise [ BeleteBranchSummary ]
 git.deleteBranches = (names, isForce = false) => {
   return Promise.all(
     names.map(name => git.deleteBranch(name, isForce))
   );
 };
 
-// getBranches :: Object -> Array
-const getBranches = ({ all, branches, }) => all.map(name => branches[name]);
-
-// listLocaLBranches :: * -> Promise
+// listLocaLBranches :: * -> Promise BranchSummary
 git.listLocalBranches = () => {
   return new Promise(
     (resolve, reject) => {
@@ -51,6 +48,6 @@ git.listLocalBranches = () => {
         resolve(BranchSummary);
       });
     }
-  ).then(getBranches);
+  );
 };
 

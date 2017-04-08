@@ -2,6 +2,7 @@
 const chalk = require('chalk');
 const inquirer = require('inquirer');
 const {
+  alphaCompare,
   compose,
   curry,
   filter,
@@ -25,6 +26,12 @@ ui.getName = partial(get, 'name');
 
 // ui.getNames :: [{ name: a }] -> [a]
 ui.getNames = curry(map)(ui.getName);
+
+// ui.sortByName ({ name: String }, { name: String }) -> Number
+ui.sortByName = ({ name: a, }, { name: b, }) => alphaCompare(a, b);
+
+// ui.sortBranches :: Array -> Array
+ui.sortBranches = branches => branches.sort(ui.sortByName);
 
 // ui.branchToChoice :: Object -> Object
 ui.branchToChoice = ({ current, name, }) => ({
@@ -70,7 +77,8 @@ ui.askQuestion = notSelected => compose(
   inquirer.prompt,
   ui.buildPrompt,
   curry(ui.buildSelected)(notSelected),
-  ui.buildChoices
+  ui.buildChoices,
+  ui.sortBranches
 );
 
 // ui.getAnswers :: { branches: a } -> a
@@ -93,7 +101,7 @@ ui.buildResultMsg = names => {
     'No branches selected';
 
   // pad start with two extra spaces to match Inquirer logs
-  return `  ${chalk.bold(message)}${chalk.cyan(names)}`;
+  return `${chalk.green.bold('-')} ${chalk.bold(message)}${chalk.cyan(names)}`;
 };
 
 // ui.logResult :: Array -> Undefined
@@ -111,14 +119,15 @@ ui.getErrMsg = err => {
 };
 
 // ui.formatErrMsg :: String -> String
-ui.formatErrMsg = msg =>
-`${chalk.green('!')} ${chalk.red('Error')}${chalk.bold(`: ${msg}`)}`;
+ui.formatErrMsg = msg => `${chalk.red.bold('! Error: ')}${msg}`;
 
 // ui.buildErrMsg :: String -> String
 ui.buildErrMsg = compose(
   ui.formatErrMsg,
   toTitleCase,
   partialRight(replace, '\n  ', '\n'),
+  partialRight(replace, 'git-chipper -f', 'git branch -D BAZ'),
+  partialRight(replace, '', 'fatal: '),
   partialRight(replace, '', 'error: '),
   ui.getErrMsg
 );

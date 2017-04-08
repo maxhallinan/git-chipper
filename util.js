@@ -1,6 +1,9 @@
 'use strict';
 const _ = exports;
 
+// alphaCompare :: (String, String) -> Number
+_.alphaCompare = (a = '', b = '') => a.toLowerCase().localeCompare(b.toLowerCase());
+
 // compose ::
 _.compose = (...fns) => x => [ ...fns, ].reverse().reduce((x, fn) => fn(x), x);
 

@@ -8,6 +8,9 @@ const help = `
     $ git-chipper
 
   Options
+    -f, --force
+      Force delete selected branches.
+
     -n, --not
       Select all branches except those named in this comma-separated list.
 
@@ -21,17 +24,19 @@ const help = `
 
 const opts = {
   alias: {
+    f: 'force',
     n: 'not',
   },
   default: {
+    force: false,
     not: '',
   },
 };
 
 const cli = meow(help, opts);
 
-const { not, } = cli.flags;
+const { force, not, } = cli.flags;
 const notSelected = not ? not.split(',') : [];
 
-chipper(notSelected);
+chipper(notSelected, force);
 

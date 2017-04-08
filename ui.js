@@ -12,6 +12,8 @@ const {
   not,
   partial,
   partialRight,
+  replace,
+  toTitleCase,
 } = require('./util');
 
 const ui = exports;
@@ -101,6 +103,13 @@ ui.logResult = compose(
   ui.joinNames
 );
 
+// ui.getErrMsg :: String | Error -> String
+ui.getErrMsg = err => {
+  const msg = typeof err === 'string' ? err : err.message;
+
+  return msg;
+};
+
 // ui.formatErrMsg :: String -> String
 ui.formatErrMsg = msg =>
 `${chalk.green('!')} ${chalk.red('Error')}${chalk.bold(`: ${msg}`)}`;
@@ -108,9 +117,10 @@ ui.formatErrMsg = msg =>
 // ui.buildErrMsg :: String -> String
 ui.buildErrMsg = compose(
   ui.formatErrMsg,
-  (message = '') => `${message[0].toUpperCase()}${message.substring(1)}`,
-  (message = '') => message.replace('\n', '\n  '),
-  (message = '') => message.replace('error: ', '')
+  toTitleCase,
+  partialRight(replace, '\n  ', '\n'),
+  partialRight(replace, '', 'error: '),
+  ui.getErrMsg
 );
 
 // ui.logError :: String -> Undefined

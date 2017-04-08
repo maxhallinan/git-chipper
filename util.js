@@ -43,9 +43,12 @@ _.not = x => !x;
 // partial ::
 _.partial = (fn, ...args) => fn.bind(null, ...args);
 
-// partialRight :: (a -> a, b
+// partialRight :: (a -> a, b)
 _.partialRight = (fn, ...args) => (...nextArgs) => fn(...nextArgs, ...args.reverse());
 
 // replace :: (String, String | RegEx, String) -> String
 _.replace = (source, pattern, replacement) => source.replace(pattern, replacement);
+
+// toTitleCase :: String -> String
+_.toTitleCase = str => `${str[0].toUpperCase()}${str.substring(1)}`;
 

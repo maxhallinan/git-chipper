@@ -1,20 +1,23 @@
 'use strict';
 const simpleGit = require('simple-git')();
+
 // silence logging
 simpleGit.silent(true);
 
 const git = exports;
 
 // deleteBranch :: String -> Promise
-git.deleteBranch = name => {
+git.deleteBranch = (name, isForce = false) => {
+  // Use both `-d` and `-D` to work around two `simple-git` limitations:
+  // 1. simple-git#deleteLocalBranch does not enable force delete.
+  // 2. A DeleteBranchSummary is only provided to the `simple-git#deleteLocalBranch`
+  // or `simple-git#branch` callback if `-d` is in the `options` array.
+  // Thus, to both force delete and receive `DeleteBranchSummary`,
+  // provide both `-d` and `-D`.
+  const args = isForce ? [ '-d', '-D', name, ] : [ '-d', name, ];
+
   return new Promise((resolve, reject) => {
-    // Use both `-d` and `-D` to work around two `simple-git` limitations:
-    // 1. simple-git#deleteLocalBranch does not enable force delete.
-    // 2. A DeleteBranchSummary is only provided to the `simple-git#deleteLocalBranch`
-    // or `simple-git#branch` callback if `-d` is in the `options` array.
-    // Thus, to both force delete and receive `DeleteBranchSummary`,
-    // provide both `-d` and `-D`.
-    simpleGit.branch([ '-d', '-D', name, ], (err, DeleteBranchSummary) => {
+    simpleGit.branch(args, (err, DeleteBranchSummary) => {
       if (err) {
         reject(err);
         return;
@@ -26,8 +29,10 @@ git.deleteBranch = name => {
 };
 
 // deleteBranches :: Array -> Promise
-git.deleteBranches = names => {
-  return Promise.all(names.map(git.deleteBranch));
+git.deleteBranches = (names, isForce = false) => {
+  return Promise.all(
+    names.map(name => git.deleteBranch(name, isForce))
+  );
 };
 
 // getBranches :: Object -> Array

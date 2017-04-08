@@ -25,7 +25,7 @@ $ git-chipper --help
       Force delete selected branches.
 
     -n, --not
-      Select all branches except those named in this comma-separated list.
+      Select all branches not named in this comma-separated list.
 
   Examples
     $ git-chipper

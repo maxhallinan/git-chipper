@@ -1,7 +1,10 @@
 #!/usr/bin/env node
 'use strict';
 const meow = require('meow');
+const updateNotifier = require('update-notifier');
+
 const { deleteBranches, listLocalBranches, } = require('./git');
+const pkg = require('./package.json');
 const { askQuestion, getAnswers, logError, logResult, } = require('./ui');
 const { curry, partialRight, } = require('./util');
 
@@ -55,4 +58,7 @@ listLocalBranches()
 .then(partialRight(deleteBranches, isForce))
 .then(logResult)
 .catch(logError);
+
+// prompt user to update when there is a new package version
+updateNotifier({pkg}).notify();
 

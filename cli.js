@@ -57,8 +57,8 @@ listLocalBranches()
 .then(getAnswers)
 .then(partialRight(deleteBranches, isForce))
 .then(logResult)
-.catch(compose(_ => process.exit(1), logError));
+.catch(compose(() => process.exit(1), logError));
 
 // prompt user to update when there is a new package version
-updateNotifier({pkg}).notify();
+updateNotifier({ pkg, }).notify();
 

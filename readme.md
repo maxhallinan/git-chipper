@@ -1,6 +1,6 @@
 # git-chipper
 
-Batch delete local branches.
+An interactive CLI for batch deleting local branches.
 
 <img alt="CLI demo" src="cli-demo.gif" width="998">
 
@@ -17,7 +17,7 @@ $ npm install --global git-chipper
 ```
 $ git-chipper --help
 
-  Batch delete local branches.
+  An interactive CLI for batch deleting local branches.
 
   Usage
     $ git-chipper

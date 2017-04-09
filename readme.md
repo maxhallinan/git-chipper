@@ -2,6 +2,8 @@
 
 Batch delete local branches.
 
+<img alt="CLI demo" src="cli-demo.gif" width="998">
+
 
 ## Install
 

@@ -6,7 +6,7 @@ const updateNotifier = require('update-notifier');
 const { deleteBranches, listLocalBranches, } = require('./git');
 const pkg = require('./package.json');
 const { askQuestion, getAnswers, logError, logResult, } = require('./ui');
-const { curry, partialRight, } = require('./util');
+const { compose, curry, partialRight, } = require('./util');
 
 // adaptBranches :: { all: [ name ], { name: Object } } -> [ Object ]
 const adaptBranches = ({ all, branches, }) => all.map(name => branches[name]);
@@ -57,7 +57,7 @@ listLocalBranches()
 .then(getAnswers)
 .then(partialRight(deleteBranches, isForce))
 .then(logResult)
-.catch(logError);
+.catch(compose(_ => process.exit(1), logError));
 
 // prompt user to update when there is a new package version
 updateNotifier({pkg}).notify();

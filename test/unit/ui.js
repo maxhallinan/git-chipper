@@ -126,8 +126,8 @@ describe('unit > ui > branchToChoice', function () {
   })
 
   it('Returns an object with the expected shape.', function () {
-    const currentKeys = Object.keys(current);
-    const notCurrentKeys = Object.keys(notCurrent);
+    const currentKeys = Object.keys(currentOutput);
+    const notCurrentKeys = Object.keys(notCurrentOutput);
 
     const expected = [ 'disabled', 'name', 'short', 'value', ];
 
@@ -166,9 +166,57 @@ describe('unit > ui > branchToChoice', function () {
   });
 });
 
-describe('buildChoices', function () {});
+describe('buildChoices', function () {
+  it('Returns an array of choices.', function () {
+    const input = [
+      {
+        name: 'foo',
+        current: false,
+      },
+      {
+        name: 'bar',
+        current: true,
 
-describe('isSelected', function () {});
+      },
+      {
+        name: 'baz',
+        current: false,
+      },
+    ];
+
+    const output = ui.buildChoices(input);
+
+    const expected = input.map(ui.branchToChoice);
+
+    assert.deepEqual(output, expected);
+  });
+});
+
+describe('isSelected', function () {
+  it('Returns false notSelected array includes name', function () {
+    const notSelected = [ 'foo', 'bar', ];
+
+    const input = 'foo';
+
+    const output = ui.isSelected(notSelected)(input);
+
+    const expected = false;
+
+    assert.strictEqual(output, expected);
+  });
+
+  it('Returns true notSelected array does not include name', function () {
+    const notSelected = [ 'foo', 'bar', ];
+
+    const input = 'baz';
+
+    const output = ui.isSelected(notSelected)(input);
+
+    const expected = true;
+
+    assert.strictEqual(output, expected);
+  });
+});
 
 describe('filterSelected', function () {});
 

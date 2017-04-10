@@ -112,11 +112,7 @@ ui.logResult = compose(
 );
 
 // ui.getErrMsg :: String | Error -> String
-ui.getErrMsg = err => {
-  const msg = typeof err === 'string' ? err : err.message;
-
-  return msg;
-};
+ui.getErrMsg = err => err.message || err;
 
 // ui.formatErrMsg :: String -> String
 ui.formatErrMsg = msg => `${chalk.red.bold('! Error: ')}${msg}`;

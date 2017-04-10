@@ -122,7 +122,7 @@ ui.buildErrMsg = compose(
   ui.formatErrMsg,
   toTitleCase,
   partialRight(replace, '\n  ', '\n'),
-  partialRight(replace, 'git-chipper -f', 'git branch -D BAZ'),
+  partialRight(replace, 'git-chipper -f', 'git branch -D'),
   partialRight(replace, '', /(error: |fatal: )/g),
   ui.getErrMsg
 );

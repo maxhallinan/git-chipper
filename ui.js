@@ -118,7 +118,12 @@ ui.getErrMsg = err => err.message || err;
 ui.formatErrMsg = msg => `${chalk.red.bold('! Error: ')}${msg}`;
 
 // ui.formatLines :: String -> String
-ui.formatLines = str => replace(str, '\n  ', '\n');
+ui.formatLines = compose(
+  str => str.trim(),
+  str => str.join('\n'),
+  partial(map, str => `  ${str.trim()}`),
+  str => str.split('\n')
+);
 
 // ui.stripGitCopy :: String -> String
 ui.stripGitCopy = str => replace(str, '', /(error: |fatal: )/g);

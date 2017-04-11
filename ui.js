@@ -117,13 +117,26 @@ ui.getErrMsg = err => err.message || err;
 // ui.formatErrMsg :: String -> String
 ui.formatErrMsg = msg => `${chalk.red.bold('! Error: ')}${msg}`;
 
+// ui.formatLines :: String -> String
+ui.formatLines = str => replace(str, '\n  ', '\n');
+
+// ui.stripGitCopy :: String -> String
+ui.stripGitCopy = str => replace(str, '', /(error: |fatal: )/g);
+
+// ui.suggestForceFlag :: String -> String
+ui.suggestForceFlag = str => replace(
+  str,
+  'git-chipper --force',
+  /('git branch -D .+?(?<='))/g
+);
+
 // ui.buildErrMsg :: String -> String
 ui.buildErrMsg = compose(
   ui.formatErrMsg,
   toTitleCase,
-  partialRight(replace, '\n  ', '\n'),
-  partialRight(replace, 'git-chipper -f', 'git branch -D'),
-  partialRight(replace, '', /(error: |fatal: )/g),
+  ui.formatLines,
+  ui.stripGitCopy,
+  ui.suggestForceFlag,
   ui.getErrMsg
 );
 

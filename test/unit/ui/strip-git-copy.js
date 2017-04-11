@@ -22,7 +22,7 @@ describe('unit > ui > stripGitCopy', function () {
     assert.strictEqual(output, expected);
   });
 
-  it('Does not strip irrelevant text.', function () {
+  it('Leaves other text unchanged.', function () {
     const input = 'foo';
 
     const output = ui.stripGitCopy(input);

@@ -7,7 +7,7 @@ describe('unit > ui > suggestForceFlag', function () {
 
     const output = ui.suggestForceFlag(input);
 
-    const expected = `foo bar 'git-chipper --force' baz qux`;
+    const expected = 'foo bar \'git-chipper --force\' baz qux';
 
     assert.strictEqual(output, expected);
   });

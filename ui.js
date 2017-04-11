@@ -130,13 +130,13 @@ ui.formatLines = compose(
 );
 
 // ui.stripGitCopy :: String -> String
-ui.stripGitCopy = str => replace(str, '', /(error: |fatal: )/g);
+ui.stripGitCopy = str => replace(str, /(error: |fatal: )/g, '');
 
 // ui.suggestForceFlag :: String -> String
 ui.suggestForceFlag = str => replace(
   str,
-  'git-chipper --force',
-  /('git branch -D .+?(?<='))/g
+  /'git branch -D [^']*'/g,
+  `'git-chipper --force'`
 );
 
 // ui.buildErrMsg :: String -> String

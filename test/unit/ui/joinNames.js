@@ -3,15 +3,9 @@ const ui = require('../../../ui');
 
 describe('unit > ui > joinNames', function () {
   const input = [
-    {
-      branch: 'foo',
-    },
-    {
-      branch: 'bar',
-    },
-    {
-      branch: 'baz',
-    },
+    { branch: 'foo', },
+    { branch: 'bar', },
+    { branch: 'baz', },
   ];
 
   let output;

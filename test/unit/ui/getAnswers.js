@@ -3,7 +3,11 @@ const ui = require('../../../ui');
 
 describe('unit > ui > getAnswers', function () {
   it('Returns an array of answers.', function () {
-    assert.deepEqual(ui.getAnswers({branches: []}), []);
+    const branches = [ 'foo' , 'bar', 'baz', ];
+
+    const output = ui.getAnswers({ branches, });
+
+    assert.deepEqual(output, branches);
   })
 });
 

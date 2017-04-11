@@ -3,7 +3,13 @@ const ui = require('../../../ui');
 
 describe('unit > ui > getDeleted', function () {
   it('Returns a branch name.', function () {
-    assert.strictEqual(ui.getDeleted({ branch: 'foo', }), 'foo');
+    const deleted = { branch: 'foo', };
+
+    const output = ui.getDeleted(deleted);
+
+    const expected = deleted.branch;
+
+    assert.strictEqual(output, expected);
   });
 });
 

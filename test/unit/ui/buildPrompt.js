@@ -3,15 +3,9 @@ const ui = require('../../../ui');
 
 describe('unit > ui > buildPrompt', function () {
   const choices = [
-    {
-      name: 'foo',
-    },
-    {
-      name: 'bar',
-    },
-    {
-      name: 'baz',
-    },
+    { name: 'foo', },
+    { name: 'bar', },
+    { name: 'baz', },
   ];
 
   const selected = [ 'foo', 'bar', ];

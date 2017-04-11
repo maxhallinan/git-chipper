@@ -16,6 +16,9 @@ const help = `
     $ git-chipper
 
   Options
+    -a, --all
+      Select all branches.
+
     -f, --force
       Force delete selected branches.
 
@@ -32,11 +35,13 @@ const help = `
 
 const opts = {
   alias: {
+    a: 'all',
     f: 'force',
     h: 'help',
     n: 'not',
   },
   default: {
+    all: false,
     force: false,
     not: '',
   },
@@ -45,6 +50,7 @@ const opts = {
 const cli = meow(help, opts);
 
 const {
+  all: isAll,
   force: isForce,
   not,
 } = cli.flags;
@@ -53,7 +59,7 @@ const notSelected = not ? not.split(',') : [];
 
 listLocalBranches()
 .then(adaptBranches)
-.then(curry(askQuestion)(notSelected))
+.then(curry(askQuestion)({ isAll, notSelected, }))
 .then(getAnswers)
 .then(partialRight(deleteBranches, isForce))
 .then(logResult)

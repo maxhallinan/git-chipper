@@ -16,30 +16,19 @@ describe('unit > ui > buildSelected', function () {
     output = ui.buildSelected(notSelected, choices);
   });
 
-  it('Should return an object with the expected shape.', function () {
-    const outputKeys = Object.keys(output);
-
-    const expected = [ 'choices', 'selected', ];
-
-    assert.includeMembers(outputKeys, expected);
-    assert.strictEqual(outputKeys.length, 2);
-  });
-
-  it('Should set `choices` to the second argument', function () {
-    assert.deepEqual(output.choices, choices);
-  });
-
-  it('Should set `selected` to an empty array if notSelected is empty.', function () {
-    const choices = [];
+  it('Returns an empty array if notSelected is empty.', function () {
     const notSelected = [];
+    const choices = [];
 
-    assert.deepEqual(ui.buildSelected(notSelected, choices).selected, []);
+    const output = ui.buildSelected(notSelected, choices);
+
+    assert.deepEqual(output, []);
   });
 
   it('Should set `selected` to an array of choice names if notSelected is not empty', function () {
     const expected = [ 'bar', 'baz', ];
 
-    assert.deepEqual(output.selected, expected);
+    assert.deepEqual(output, expected);
   });
 });
 

@@ -56,10 +56,14 @@ ui.filterSelected = notSelected => compose(
   ui.getNames
 );
 
+// ui.buildSelected :: ([ a ], [{ name: b }]) -> [ b ]
+ui.buildSelected = (notSelected, choices) =>
+notSelected.length ? ui.filterSelected(notSelected)(choices) : [];
+
 // ui.listSelected :: (Array, Object) -> Object
-ui.buildSelected = (notSelected, choices) => ({
+ui.configurePrompt = ({ isAll, notSelected, }, choices) => ({
   choices,
-  selected: notSelected.length ? ui.filterSelected(notSelected)(choices) : [],
+  selected: isAll ? ui.getNames(choices) : ui.buildSelected(notSelected, choices),
 });
 
 // ui.buildPrompt :: Object -> Promise
@@ -73,10 +77,10 @@ ui.buildPrompt = ({ selected, choices, }) => ({
 });
 
 // ui.showPrompt :: Array -> Promise
-ui.askQuestion = notSelected => compose(
+ui.askQuestion = (opts) => compose(
   inquirer.prompt,
   ui.buildPrompt,
-  curry(ui.buildSelected)(notSelected),
+  curry(ui.configurePrompt)(opts),
   ui.buildChoices,
   ui.sortBranches
 );

@@ -23,6 +23,9 @@ $ git-chipper --help
     $ git-chipper
 
   Options
+    -a, --all
+      Select all branches.
+
     -f, --force
       Force delete selected branches.
 

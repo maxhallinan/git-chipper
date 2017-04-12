@@ -27,10 +27,10 @@ const help = `
 
   Examples
     $ git-chipper
-    # ...follow the terminal prompt instructions
+    # ... follow the terminal prompt instructions
 
     $ git-chipper --not=foo,bar,baz
-    # ...follow the terminal prompt instructions
+    # ... follow the terminal prompt instructions
 `;
 
 const opts = {

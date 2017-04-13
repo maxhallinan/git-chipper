@@ -1,8 +1,8 @@
 const assert = require('chai').assert;
 const ui = require('../../../ui');
 
-describe('unit > ui > suggestForceFlag', function () {
-  it('Replaces git command with git-chipper command', function () {
+describe('unit > ui > suggestForceFlag', () => {
+  it('Replaces git command with git-chipper command', () => {
     const input = `foo bar 'git branch -D foo' baz qux`;
 
     const output = ui.suggestForceFlag(input);
@@ -12,7 +12,7 @@ describe('unit > ui > suggestForceFlag', function () {
     assert.strictEqual(output, expected);
   });
 
-  it('Leaves other text unchanged.', function () {
+  it('Leaves other text unchanged.', () => {
     const input = `foo bar baz`;
 
     const output = ui.suggestForceFlag(input);

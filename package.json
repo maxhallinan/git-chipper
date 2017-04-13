@@ -43,6 +43,11 @@
   },
   "xo": {
     "esnext": true,
+    "globals": [
+      "before",
+      "describe",
+      "it"
+    ],
     "rules": {
       "array-bracket-spacing": [
         "error",

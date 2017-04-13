@@ -77,7 +77,7 @@ ui.buildPrompt = ({ selected, choices, }) => ({
 });
 
 // ui.showPrompt :: Array -> Promise
-ui.askQuestion = (opts) => compose(
+ui.askQuestion = opts => compose(
   inquirer.prompt,
   ui.buildPrompt,
   curry(ui.configurePrompt)(opts),

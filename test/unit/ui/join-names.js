@@ -1,7 +1,7 @@
 const assert = require('chai').assert;
 const ui = require('../../../ui');
 
-describe('unit > ui > joinNames', function () {
+describe('unit > ui > joinNames', () => {
   const input = [
     { branch: 'foo', },
     { branch: 'bar', },
@@ -10,11 +10,11 @@ describe('unit > ui > joinNames', function () {
 
   let output;
 
-  before(function () {
+  before(() => {
     output = ui.joinNames(input);
   });
 
-  it('All branch names are join in a comma-separated string.', function () {
+  it('All branch names are join in a comma-separated string.', () => {
     assert.strictEqual(output, 'foo, bar, baz');
   });
 });

@@ -1,22 +1,22 @@
 const assert = require('chai').assert;
 const ui = require('../../../ui');
 
-describe('unit > ui > buildSelected', function () {
+describe('unit > ui > buildSelected', () => {
   const choices = [
     { name: 'foo', },
     { name: 'bar', },
-    { name: 'baz', }
+    { name: 'baz', },
   ];
 
   const notSelected = [ 'foo', ];
 
   let output;
 
-  before(function () {
+  before(() => {
     output = ui.buildSelected(notSelected, choices);
   });
 
-  it('Returns an empty array if notSelected is empty.', function () {
+  it('Returns an empty array if notSelected is empty.', () => {
     const notSelected = [];
     const choices = [];
 
@@ -25,7 +25,7 @@ describe('unit > ui > buildSelected', function () {
     assert.deepEqual(output, []);
   });
 
-  it('Should set `selected` to an array of choice names if notSelected is not empty', function () {
+  it('Should set `selected` to an array of choice names if notSelected is not empty', () => {
     const expected = [ 'bar', 'baz', ];
 
     assert.deepEqual(output, expected);

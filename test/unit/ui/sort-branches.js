@@ -1,8 +1,8 @@
 const assert = require('chai').assert;
 const ui = require('../../../ui');
 
-describe('unit > ui > sortBranches', function () {
-  it('Sorts in ascending order.', function () {
+describe('unit > ui > sortBranches', () => {
+  it('Sorts in ascending order.', () => {
     const input = [
       { name: 'foo', },
       { name: 'zed', },
@@ -20,7 +20,7 @@ describe('unit > ui > sortBranches', function () {
     assert.deepEqual(output, expected);
   });
 
-  it('Sort is case-insensitive.', function () {
+  it('Sort is case-insensitive.', () => {
     const input = [
       { name: 'BAZ', },
       { name: 'bar', },

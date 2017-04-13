@@ -1,8 +1,8 @@
 const assert = require('chai').assert;
 const ui = require('../../../ui');
 
-describe('unit > ui > getDeleted', function () {
-  it('Returns a branch name.', function () {
+describe('unit > ui > getDeleted', () => {
+  it('Returns a branch name.', () => {
     const deleted = { branch: 'foo', };
 
     const output = ui.getDeleted(deleted);

@@ -1,8 +1,8 @@
 const assert = require('chai').assert;
 const ui = require('../../../ui');
 
-describe('unit > ui > filterSelected', function () {
-  it('Returns an array of branch names not included in the notSelected array.', function () {
+describe('unit > ui > filterSelected', () => {
+  it('Returns an array of branch names not included in the notSelected array.', () => {
     const input = ui.buildChoices([
       {
         current: false,
@@ -13,7 +13,7 @@ describe('unit > ui > filterSelected', function () {
       }, {
         current: false,
         name: 'baz',
-      }
+      },
     ]);
 
     const notSelected = [ 'foo', ];

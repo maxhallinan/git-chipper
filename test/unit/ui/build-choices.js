@@ -1,8 +1,8 @@
 const assert = require('chai').assert;
 const ui = require('../../../ui');
 
-describe('unit > ui > buildChoices', function () {
-  it('Returns an array of choices.', function () {
+describe('unit > ui > buildChoices', () => {
+  it('Returns an array of choices.', () => {
     const input = [
       {
         name: 'foo',
